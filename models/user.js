@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs');
 const jwt  = require('jsonwebtoken');
+const crypto = require('node:crypto')
 
 const userSchema = new mongoose.Schema({
     name:{
@@ -49,9 +50,22 @@ userSchema.pre('save',async function(next){
         }
     this.password= await bcrypt.hash(this.password,10)
 })
+
 //create and return JWT token
 userSchema.methods.getJwtToken= function (){
-    jwt.sign({id: this._id},proces.env.JWT_SECRET,expiresIn: process.env.JWT_EXPIRY)//sign method is for creating the token first we pass payload i.e id
+    jwt.sign({id: this._id},proces.env.JWT_SECRET,{expiresIn: process.env.JWT_EXPIRY})//sign method is for creating the token first we pass payload i.e id
+}
+
+//genrate a forgot Password token - (we just need to genrate a random string here we can write a manual function to generate random string but here it is preffered to use CRYPTO package  )
+userSchema.method.getForgotPasswordToken = function () {
+    //
+    const forgotToken = crypto.randomBytes(20).toString('hex');
+
+    this.forgotPasswordToken= crypto.createHash('sha256').update(forgotToken).digest('hex')
+//token expiry time is being set to 20 min 
+    this.forgotPasswordTokenExpiry = Date.now() + 20*60*1000;
+
+    return forgotToken;
 }
 
 //validate password with user provided password
