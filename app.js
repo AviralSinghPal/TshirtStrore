@@ -4,6 +4,7 @@ const express = require('express')
 const fileUpload = require('express-fileupload')
 const morgan = require('morgan')
 const home  = require('./routes/home')
+const user  = require('./routes/user')
 
 const app = express()
 
@@ -22,5 +23,6 @@ app.get("/",(req,res)=>{
 })
 
 app.use("/api/v1/",home)
-  
+app.use("/api/v1",user)
+
 module.exports = app
