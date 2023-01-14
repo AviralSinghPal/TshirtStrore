@@ -23,6 +23,6 @@ app.get("/",(req,res)=>{
 })
 
 app.use("/api/v1/",home)
-app.use("/api/v1",user)
+app.use("/api/v1/",user)
 
 module.exports = app
