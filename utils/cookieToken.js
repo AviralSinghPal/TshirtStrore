@@ -5,7 +5,7 @@ const cookieToken = (user, res)=>{
         httpOnly: true
     }
 
-    res.status(200).cookie('token', token.options).json({
+    res.status(200).cookie('token', token, options).json({
         sucess:true,
         token,
         user,
