@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     password:{
         type: String,
         required:true,
-        maxlength: [8,"password should be atleast 8 characters"],
+        minlength: [8,"password should be atleast 8 characters"],
         select: false
     },
     role:{
@@ -30,11 +30,11 @@ const userSchema = new mongoose.Schema({
     photo: {
         id: {
             type:String,
-            required: true
+            // required: true
         },
         secure_url:{
             type:String,
-            required: true
+            // required: true
         },
     },
     forgotPasswordToken: String,

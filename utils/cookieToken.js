@@ -1,3 +1,4 @@
+const getJwtToken = require('../models/user')
 const cookieToken = (user, res)=>{
     const token = user.getJwtToken()
     const options = {
