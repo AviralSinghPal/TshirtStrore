@@ -53,7 +53,8 @@ userSchema.pre('save',async function(next){
 
 //create and return JWT token
 userSchema.methods.getJwtToken= function (){
-    jwt.sign({id: this._id},proces.env.JWT_SECRET,{expiresIn: process.env.JWT_EXPIRY})//sign method is for creating the token first we pass payload i.e id
+    jwt.sign({id: this._id},process.env.JWT_SECRET,{
+        expiresIn: process.env.JWT_EXPIRY})//sign method is for creating the token first we pass payload i.e id
 }
 
 //genrate a forgot Password token - (we just need to genrate a random string here we can write a manual function to generate random string but here it is preffered to use CRYPTO package  )
