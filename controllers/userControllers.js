@@ -57,16 +57,22 @@ exports.logout = BigPromise(async(req,res,next) => {
     });
 });
 exports.forgotPassword = BigPromise(async(req,res,next) => {
+
     const {email} = req.body;
-    const user = User.findOne({email});
+    
+    const user =await User.findOne({email});
+    
+    console.log(user);
+    
     if(!user){
         return next(new CustomError('Email not found as registered ', 400))
     }
+    
     const forgotToken = user.getForgotPasswordToken()
 
     await user.save({validateBeforeSave: false})
 
-    const myUrl = `${req.protocol}://{req.get("host")}/password/reset/${forgotToken}`
+    const myUrl = `${req.protocol}://${req.get("host")}/password/reset/${forgotToken}`
 
     const message = `Copy paste this link in the URL and hit enter \n \n 
      ${myUrl}`
@@ -77,12 +83,17 @@ exports.forgotPassword = BigPromise(async(req,res,next) => {
             subject: "T-Shirt store - Password reset email",
             message
         })
+
+        res.status(200).json({
+            success: true,
+            message: "Email sent successfully by aviralpal@gmail.com"
+        })
     }
     catch(error){
         user.forgotPasswordToken = undefined
         user.forgotPasswordExpiry = undefined
 
         await user.save({validateBeforeSave: false})
-        return next(new CustomError(error.message,500))
+        return next(new CustomError(error.message,401))
     }
 });
