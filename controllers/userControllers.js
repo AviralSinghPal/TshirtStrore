@@ -2,6 +2,7 @@ const User = require('../models/user')
 const BigPromise = require('../middleware/bigPromise')
 const CustomError = require("../utils/customError");
 const cookieToken = require('../utils/cookieToken');
+const mailHelper = require('../utils/emailHelper');
 
 exports.signup = BigPromise(async(req,res,next) => {
     const {name, email, password} = req.body
@@ -43,4 +44,45 @@ exports.getAll = BigPromise(async(req,res,next) => {
         success: true,
         user
     })
+});
+exports.logout = BigPromise(async(req,res,next) => {
+    res.cookie('token',null, {
+        expires : new Date(Date.now()),
+        httpOnly: true,
+    });
+
+    res.status(200).json({
+        success: true,
+        message: "Logout sucess"
+    });
+});
+exports.forgotPassword = BigPromise(async(req,res,next) => {
+    const {email} = req.body;
+    const user = User.findOne({email});
+    if(!user){
+        return next(new CustomError('Email not found as registered ', 400))
+    }
+    const forgotToken = user.getForgotPasswordToken()
+
+    await user.save({validateBeforeSave: false})
+
+    const myUrl = `${req.protocol}://{req.get("host")}/password/reset/${forgotToken}`
+
+    const message = `Copy paste this link in the URL and hit enter \n \n 
+     ${myUrl}`
+
+    try{
+        await mailHelper({
+            email: user.email,
+            subject: "T-Shirt store - Password reset email",
+            message
+        })
+    }
+    catch(error){
+        user.forgotPasswordToken = undefined
+        user.forgotPasswordExpiry = undefined
+
+        await user.save({validateBeforeSave: false})
+        return next(new CustomError(error.message,500))
+    }
 });
