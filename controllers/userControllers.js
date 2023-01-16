@@ -23,7 +23,8 @@ exports.login = BigPromise(async(req,res,next)=>{
     //check for presence of email and password
     if(!email || !password) return next(new CustomError("Please provide email and password",401));
 
-    const user = User.findOne({email}).select("+password")
+    const user = await User.findOne({email}).select("+password")
+    console.log(user);
     if(!user) return next(new CustomError("User not found in DB",400));
 
     const isPasswordCorrect = await user.validatePassword(password);
@@ -32,4 +33,14 @@ exports.login = BigPromise(async(req,res,next)=>{
 
     //now if the user has provided correct email and password , now we send token to user 
     cookieToken(user, res);
+});
+
+exports.getAll = BigPromise(async(req,res,next) => {
+    const [...user] = (await User.find());
+    console.log(user[0].name);
+
+    res.status(200).json({
+        success: true,
+        user
+    })
 });

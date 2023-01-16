@@ -51,6 +51,11 @@ userSchema.pre('save',async function(next){
     this.password= await bcrypt.hash(this.password,10)
 })
 
+//validate password with user provided password
+userSchema.methods.validatePassword = async function(userSendPassword){
+    return bcrypt.compare(userSendPassword, this.password)
+ }
+ 
 //create and return JWT token
 userSchema.methods.getJwtToken= function (){
     jwt.sign({id: this._id},process.env.JWT_SECRET,{
@@ -69,10 +74,6 @@ userSchema.methods.getForgotPasswordToken = function () {
     return forgotToken;
 }
 
-//validate password with user provided password
-userSchema.methods.validatePassword = async function(userSendPassword){
-   return bcrypt.compare(userSendPassword, this.password)
-}
 
 
 
