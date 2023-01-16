@@ -58,7 +58,7 @@ userSchema.methods.getJwtToken= function (){
 }
 
 //genrate a forgot Password token - (we just need to genrate a random string here we can write a manual function to generate random string but here it is preffered to use CRYPTO package  )
-userSchema.method.getForgotPasswordToken = function () {
+userSchema.methods.getForgotPasswordToken = function () {
     //
     const forgotToken = crypto.randomBytes(20).toString('hex');
 
@@ -71,7 +71,7 @@ userSchema.method.getForgotPasswordToken = function () {
 
 //validate password with user provided password
 userSchema.methods.validatePassword = async function(userSendPassword){
-    bcrypt.compare(userSendPassword, this.password)
+   return bcrypt.compare(userSendPassword, this.password)
 }
 
 
