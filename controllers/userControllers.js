@@ -83,7 +83,7 @@ exports.forgotPassword = BigPromise(async(req,res,next) => {
             subject: "T-Shirt store - Password reset email",
             message
         })
-
+//sending a response message after successfully sendingemail 
         res.status(200).json({
             success: true,
             message: "Email sent successfully by aviralpal@gmail.com"
@@ -96,4 +96,18 @@ exports.forgotPassword = BigPromise(async(req,res,next) => {
         await user.save({validateBeforeSave: false})
         return next(new CustomError(error.message,401))
     }
+});
+exports.passwordReset = BigPromise(async(req,res,next) => {
+    const token = req.params.token;
+    
+    const encryToken = crypto.createHash('sha256').update(forgotToken).digest('hex');
+
+    const user = await User.findOne({
+        encryToken,
+        forgotPasswordExpiry: {$gt: Date.now()}
+     })
+     if(!user){
+        return next(new CustomError('Token is invalid or expired'))
+     }
+     if(req.body.password !==  )
 });
