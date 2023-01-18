@@ -97,17 +97,42 @@ exports.forgotPassword = BigPromise(async(req,res,next) => {
         return next(new CustomError(error.message,401))
     }
 });
-exports.passwordReset = BigPromise(async(req,res,next) => {
+exports.passwordReset = BigPromise(async (req, res, next) => {
+    //get token from params
     const token = req.params.token;
-    
-    const encryToken = crypto.createHash('sha256').update(forgotToken).digest('hex');
-
+  
+    // hash the token as db also stores the hashed version
+    const encryToken = crypto.createHash("sha256").update(token).digest("hex");
+  
+    // find user based on hased on token and time in future
     const user = await User.findOne({
-        encryToken,
-        forgotPasswordExpiry: {$gt: Date.now()}
-     })
-     if(!user){
-        return next(new CustomError('Token is invalid or expired'))
-     }
-     if(req.body.password !==  )
-});
+      encryToken,
+      forgotPasswordExpiry: { $gt: Date.now() },
+    });
+  
+    if (!user) {
+      return next(new CustomError("Token is invalid or expired", 400));
+    }
+  
+    // check if password and conf password matched
+    if (req.body.password !== req.body.confirmPassword) {
+      return next(
+        new CustomError("password and confirm password do not match", 400)
+      );
+    }
+  
+    // update password field in DB
+    user.password = req.body.password;
+  
+    // reset token fields
+    user.forgotPasswordToken = undefined;
+    user.forgotPasswordExpiry = undefined;
+  
+    // save the user
+    await user.save();
+  
+    // send a JSON response OR send token
+  
+    cookieToken(user, res);
+  });
+  
