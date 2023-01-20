@@ -97,7 +97,7 @@ exports.forgotPassword = BigPromise(async(req,res,next) => {
         return next(new CustomError(error.message,401))
     }
 });
-exports.passwordReset = BigPromise(async (req, res, next) => {
+exports.passwordReset=BigPromise(async (req, res, next) => {
     //get token from params
     const token = req.params.token;
   
