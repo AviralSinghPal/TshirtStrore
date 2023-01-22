@@ -4,6 +4,7 @@ const CustomError = require("../utils/customError");
 const cookieToken = require('../utils/cookieToken');
 const mailHelper = require('../utils/emailHelper');
 
+
 exports.signup = BigPromise(async(req,res,next) => {
     const {name, email, password} = req.body
 
