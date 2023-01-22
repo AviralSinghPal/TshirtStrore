@@ -72,7 +72,7 @@ exports.forgotPassword = BigPromise(async(req,res,next) => {
 
     await user.save({validateBeforeSave: false})
 
-    const myUrl = `${req.protocol}://${req.get("host")}/password/reset/${forgotToken}`
+    const myUrl = `${req.protocol}://${req.get("host")}/api/v1/password/reset/${forgotToken}`
 
     const message = `Copy paste this link in the URL and hit enter \n \n 
      ${myUrl}`
