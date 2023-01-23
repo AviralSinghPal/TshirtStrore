@@ -11,3 +11,4 @@ connectWithDb();//connecting with DB
 app.listen(process.env.DEV_PORT, () => {
     console.log(`Server is running at port: ${process.env.DEV_PORT}`);
   });
+  
