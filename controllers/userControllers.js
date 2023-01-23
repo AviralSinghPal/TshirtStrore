@@ -47,6 +47,7 @@ exports.getAll = BigPromise(async(req,res,next) => {
         user
     })
 });
+
 exports.logout = BigPromise(async(req,res,next) => {
     res.cookie('token',null, {
         expires : new Date(Date.now()),
@@ -58,6 +59,7 @@ exports.logout = BigPromise(async(req,res,next) => {
         message: "Logout sucess"
     });
 });
+
 exports.forgotPassword = BigPromise(async(req,res,next) => {
 
     const {email} = req.body;
@@ -99,6 +101,7 @@ exports.forgotPassword = BigPromise(async(req,res,next) => {
         return next(new CustomError(error.message,401))
     }
 });
+
 exports.passwordReset = BigPromise(async (req, res, next) => {
     //get token from params
     const token = req.params.token;
@@ -136,8 +139,8 @@ exports.passwordReset = BigPromise(async (req, res, next) => {
     // send a JSON response OR send token
   
     cookieToken(user, res);
-  });
-  
+});  
+
 exports.getLoggedInUserDetails = BigPromise(async (req, res, next) => {   
 
     const user = await User.findById(req.user.id);
@@ -145,8 +148,8 @@ exports.getLoggedInUserDetails = BigPromise(async (req, res, next) => {
         success: 'true',
         user
     });
-  });  
-  
+});    
+
 exports.changePassword = BigPromise(async (req, res, next) => {
     const userId = req.user.id;
     const user = await User.findById(userId).select("+password");
@@ -161,6 +164,7 @@ exports.changePassword = BigPromise(async (req, res, next) => {
     await user.save();
     cookieToken(user, res);
 });  
+
 exports.updateuserDetails = BigPromise(async (req, res, next) => {
     
     const newData = {
@@ -179,3 +183,4 @@ exports.updateuserDetails = BigPromise(async (req, res, next) => {
         success: true
     })    
 });  
+
