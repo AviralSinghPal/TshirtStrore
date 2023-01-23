@@ -23,6 +23,7 @@ exports.login = BigPromise(async(req,res,next)=>{
 
     const {email, password} = req.body;
     //check for presence of email and password
+    
     if(!email || !password) return next(new CustomError("Please provide email and password",401));
 
     const user = await User.findOne({email}).select("+password")
@@ -98,7 +99,7 @@ exports.forgotPassword = BigPromise(async(req,res,next) => {
         return next(new CustomError(error.message,401))
     }
 });
-exports.passwordReset=BigPromise(async (req, res, next) => {
+exports.passwordReset = BigPromise(async (req, res, next) => {
     //get token from params
     const token = req.params.token;
   
@@ -137,10 +138,9 @@ exports.passwordReset=BigPromise(async (req, res, next) => {
     cookieToken(user, res);
   });
   
-exports.getLoggedInUserDeatails=BigPromise(async (req, res, next) => {
-   
+exports.getLoggedInUserDetails = BigPromise(async (req, res, next) => {   
 
-    const user =  await User.findById(req.user.id);
+    const user = await User.findById(req.user.id);
     res.status(200).json({
         success: 'true',
         user
