@@ -161,3 +161,21 @@ exports.changePassword = BigPromise(async (req, res, next) => {
     await user.save();
     cookieToken(user, res);
 });  
+exports.updateuserDetails = BigPromise(async (req, res, next) => {
+    
+    const newData = {
+        name: req.body.name,
+        email: req.body.email
+    };
+
+    //can update photo her later on as an additional functionality
+
+    const user = await User.findByIdAndUpdate(req.user.id,newData,{
+        new: true,
+        runValidators: true,
+        useFindAndModify: false//just for backward compatibility , in newer version of mongo it might already be false by default       
+    });
+    res.status(200).json({
+        success: true
+    })    
+});  
