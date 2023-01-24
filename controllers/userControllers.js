@@ -3,6 +3,7 @@ const BigPromise = require('../middleware/bigPromise')
 const CustomError = require("../utils/customError");
 const cookieToken = require('../utils/cookieToken');
 const mailHelper = require('../utils/emailHelper');
+const user = require('../models/user');
 
 
 exports.signup = BigPromise(async(req,res,next) => {
@@ -192,3 +193,11 @@ exports.adminAllUser = BigPromise(async (req, res, next) => {
     });
 });  
 
+
+exports.adminGetOneUser = BigPromise(async (req, res, next) => {
+    const user = await User.findById(req.params.id);
+
+    if(!user){
+        next(new CustomError("No user found ",400));
+    }
+})
