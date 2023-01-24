@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const {signup, login, getAll, logout, forgotPassword, passwordReset, getLoggedInUserDetails, changePassword, updateuserDetails, adminAllUser, adminGetOneUser} = require('../controllers/userControllers');
+const {signup, login, getAll, logout, forgotPassword, passwordReset, getLoggedInUserDetails, changePassword, updateuserDetails, adminAllUser, adminGetOneUser, adminUpdateOneUserDetail, adminDeleteOneUserDetail} = require('../controllers/userControllers');
 const { isLoggedIn, customRole } = require('../middleware/user');
 
 
@@ -15,12 +15,11 @@ router.route("/userdashboard").get(isLoggedIn, getLoggedInUserDetails);
 router.route("/password/update").get(isLoggedIn, changePassword);
 router.route("/userdashboard/update").post(isLoggedIn, updateuserDetails);
 
-//admin only routes
-router.route("/admin/users").get(isLoggedIn,customRole('admin'), adminAllUser);
-router.route("/admin/user/:id").get(isLoggedIn,customRole('admin'), adminGetOneUser);
+//admin and manger only routes
+router.route("/admin/users").get(isLoggedIn,customRole('admin','manager'), adminAllUser);
+router.route("/admin/user/:id").get(isLoggedIn,customRole('admin','manager'), adminGetOneUser).put(isLoggedIn,customRole('admin','manager'), adminUpdateOneUserDetail).delete(isLoggedIn,customRole('admin','manager'),adminDeleteOneUserDetail);
 
 
-router.route("/manager/users").get(isLoggedIn,customRole('manager'), adminAllUser);
 
 
 module.exports = router;

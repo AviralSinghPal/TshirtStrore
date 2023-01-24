@@ -193,11 +193,49 @@ exports.adminAllUser = BigPromise(async (req, res, next) => {
     });
 });  
 
-
 exports.adminGetOneUser = BigPromise(async (req, res, next) => {
     const user = await User.findById(req.params.id);
 
     if(!user){
         next(new CustomError("No user found ",400));
     }
+    res.status(200).json({
+        success: "true",
+        user
+    })
+})
+
+
+exports.adminUpdateOneUserDetail = BigPromise(async (req, res, next) => {
+    const newData = {
+        name: req.body.name,
+        email: req.body.email,
+        role: req.body.role
+    };
+
+    //can update photo her later on as an additional functionality
+
+    const user = await User.findByIdAndUpdate(req.user.id,newData,{
+        new: true,
+        runValidators: true,
+        useFindAndModify: false//just for backward compatibility , in newer version of mongo it might already be false by default       
+    });
+    res.status(200).json({
+        success: true,
+        user
+    })    
+})
+
+exports.adminDeleteOneUserDetail = BigPromise(async (req, res, next) => {
+   const user = await User.findById(req.params.id);
+    if(!user) {
+        return next(new CustomError("No user found", 401));
+    }
+    //in case of photo we need to delete phtot first from cloudinary as if we delte user first then refernce of user will be removed
+    //can update photo her later on as an additional functionality
+
+    await user.remove();
+    res.status(200).json({
+        success: true
+    })    
 })
