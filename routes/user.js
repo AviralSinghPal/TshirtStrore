@@ -17,6 +17,7 @@ router.route("/userdashboard/update").post(isLoggedIn, updateuserDetails);
 
 //admin only routes
 router.route("/admin/users").get(isLoggedIn,customRole('admin'), adminAllUser);
+router.route("/manager/users").get(isLoggedIn,customRole('manager'), adminAllUser);
 
 
 module.exports = router;
