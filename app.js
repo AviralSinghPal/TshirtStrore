@@ -5,6 +5,7 @@ const fileUpload = require('express-fileupload')
 const morgan = require('morgan')
 const home  = require('./routes/home')
 const user  = require('./routes/user')
+const product  = require('./routes/product')
 
 const app = express()
 
@@ -24,5 +25,6 @@ app.get("/",(req,res)=>{
 
 app.use("/api/v1/",home)
 app.use("/api/v1/",user)
+app.use("/api/v1/",product)
 
 module.exports = app
