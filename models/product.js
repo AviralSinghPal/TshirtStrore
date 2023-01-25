@@ -57,7 +57,7 @@ const productSchema = new mongoose.Schema({
     }]
     ,
     user: {
-        type: mongoose.Schema.ObjectId;
+        type: mongoose.Schema.ObjectId,
         ref: 'User',
         required: ture
     },
