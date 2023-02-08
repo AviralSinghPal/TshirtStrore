@@ -203,7 +203,7 @@ exports.adminGetOneUser = BigPromise(async (req, res, next) => {
         success: "true",
         user
     })
-})
+});
 
 
 exports.adminUpdateOneUserDetail = BigPromise(async (req, res, next) => {
@@ -224,7 +224,7 @@ exports.adminUpdateOneUserDetail = BigPromise(async (req, res, next) => {
         success: true,
         user
     })    
-})
+});
 
 exports.adminDeleteOneUserDetail = BigPromise(async (req, res, next) => {
    const user = await User.findById(req.params.id);
@@ -238,4 +238,4 @@ exports.adminDeleteOneUserDetail = BigPromise(async (req, res, next) => {
     res.status(200).json({
         success: true
     })    
-})
+});
